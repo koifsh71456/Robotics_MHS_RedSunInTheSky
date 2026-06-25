@@ -23,46 +23,34 @@ display.text_pixels("Hello!", x=10, y=10, clear_screen=True)
 display.update()
 
 while True:
+    display.clear()
     if cl_1.color == ColorSensor.COLOR_BLACK:
-        display.clear()
         display.text_pixels("Black Detected (Right)", x=10, y=10, clear_screen=True)
-        display.update()
+
     elif cl_1.color == ColorSensor.COLOR_RED:
-        display.clear()
         display.text_pixels("Red Detected (Right)", x=10, y=30, clear_screen=False)
-        display.update()
+
     elif cl_1.color == ColorSensor.COLOR_GREEN:
-        display.clear()
         display.text_pixels("Green Detected (Right)", x=10, y=30, clear_screen=False)
-        display.update()
+
     elif cl_1.color == ColorSensor.COLOR_RED:
-        display.clear()
         display.text_pixels("Red Detected (Right)", x=10, y=30, clear_screen=False)
-        display.update()
+
     else:
-        display.clear()
         display.text_pixels("Nothing Detected (Right)", x=10, y=30, clear_screen=False)
-        display.update()
 
     if cl_4.color == ColorSensor.COLOR_BLACK:
-        display.clear()
         display.text_pixels("Black Detected (Left)", x=10, y=50, clear_screen=True)
-        display.update()
 
     elif cl_4.color == ColorSensor.COLOR_RED:
-        display.clear()
         display.text_pixels("Red Detected (Left)", x=10, y=70, clear_screen=False)
-        display.update()
 
     elif cl_4.color == ColorSensor.COLOR_GREEN:
-        display.clear()
         display.text_pixels("Green Detected (Left)", x=10, y=70, clear_screen=False)
-        display.update()
 
     else:
-        display.clear()
         display.text_pixels("Nothing Detected (Left)", x=10, y=70, clear_screen=False)
-        display.update()
+    display.update()
 
 
 def followLine():
@@ -81,10 +69,5 @@ def followLine():
         direction = "intersectionRight"
     if cl_4.color == ColorSensor.COLOR_GREEN:
         direction = "intersectionLeft"
-
-
         
     return direction
-        
-
-
