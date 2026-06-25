@@ -35,9 +35,12 @@ while True:
         display.clear()
         display.text_pixels("Green Detected (Right)", x=10, y=30, clear_screen=False)
         display.update()
-    
+    elif cl_1.color == ColorSensor.COLOR_RED:
+        display.clear()
+        display.text_pixels("Red Detected (Right)", x=10, y=30, clear_screen=False)
+        display.update()
     else:
-
+        display.clear()
         display.text_pixels("Nothing Detected (Right)", x=10, y=30, clear_screen=False)
         display.update()
 
@@ -57,12 +60,13 @@ while True:
         display.update()
 
     else:
+        display.clear()
         display.text_pixels("Nothing Detected (Left)", x=10, y=70, clear_screen=False)
         display.update()
 
 
 def followLine():
-    detectable_colours = [Colo]
+    detectable_colours = [ColorSensor.COLOR_BLACK, ColorSensor.COLOR_GREEN, ColorSensor.COLOR_RED]
     # the direction variable gets returned by this function which will determine which
     # way the robot goes based on the colour sensors.
     direction = ""
@@ -70,7 +74,7 @@ def followLine():
         direction = "right"
     if cl_4.color == ColorSensor.COLOR_BLACK:
         direction = "left"
-    if cl_1.color != ColorSensor.COLOR_BLACK and cl_4.color != ColorSensor.COLOR_BLACK:
+    if cl_1.color not in detectable_colours and cl_4.color not in detectable_colours:
         direction = "forward"
     # intersections will have a green square to guide to the correct direction
     if cl_1.color == ColorSensor.COLOR_GREEN:
