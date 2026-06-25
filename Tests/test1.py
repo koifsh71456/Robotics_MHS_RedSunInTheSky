@@ -20,15 +20,14 @@ cl_4.mode = ColorSensor.MODE_COL_COLOR
 
 while True:
     if cl_1.color == ColorSensor.COLOR_BLACK:
-        print("Black detected")
         display.text_pixels("Black Detected", x=10, y=10, clear_screen=True)
         display.update()
     elif cl_1.color == ColorSensor.COLOR_GREEN:
-        print("Green detected")
         display.text_pixels("Green Detected", x=10, y=30, clear_screen=False)
         display.update()
     else:
-        print("Other color detected")
+        display.text_pixels("Nothing Detected", x=10, y=30, clear_screen=False)
+        display.update()
 
 
 def followLine():
@@ -39,6 +38,8 @@ def followLine():
         direction = "right"
     if cl_4.color == ColorSensor.COLOR_BLACK:
         direction = "left"
+    if cl_1.color != ColorSensor.COLOR_BLACK and cl_4.color != ColorSensor.COLOR_BLACK:
+        direction = "forward"
     if cl_1.color == ColorSensor.COLOR_BLACK and cl_4.color == ColorSensor.COLOR_BLACK:
         direction = "intersection"
         # intersections will have a green square to guide to the correct direction
