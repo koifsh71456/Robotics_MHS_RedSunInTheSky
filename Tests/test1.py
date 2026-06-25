@@ -24,32 +24,36 @@ display.update()
 
 while True:
     display.clear()
-    if cl_1.color == ColorSensor.COLOR_BLACK:
-        display.text_pixels("Black Detected (Right)", x=10, y=10, clear_screen=True)
+    '''# if cl_1.color == ColorSensor.COLOR_BLACK:
+    #     display.text_pixels("Black Detected (Right)", x=10, y=10, clear_screen=False)
 
-    elif cl_1.color == ColorSensor.COLOR_RED:
-        display.text_pixels("Red Detected (Right)", x=10, y=30, clear_screen=False)
+    # elif cl_1.color == ColorSensor.COLOR_RED:
+    #     display.text_pixels("Red Detected (Right)", x=10, y=30, clear_screen=False)
 
-    elif cl_1.color == ColorSensor.COLOR_GREEN:
-        display.text_pixels("Green Detected (Right)", x=10, y=30, clear_screen=False)
+    # elif cl_1.color == ColorSensor.COLOR_GREEN:
+    #     display.text_pixels("Green Detected (Right)", x=10, y=30, clear_screen=False)
 
-    elif cl_1.color == ColorSensor.COLOR_RED:
-        display.text_pixels("Red Detected (Right)", x=10, y=30, clear_screen=False)
+    # elif cl_1.color == ColorSensor.COLOR_RED:
+    #     display.text_pixels("Red Detected (Right)", x=10, y=30, clear_screen=False)
 
-    else:
-        display.text_pixels("Nothing Detected (Right)", x=10, y=30, clear_screen=False)
+    # else:
+    #     display.text_pixels("Nothing Detected (Right)", x=10, y=30, clear_screen=False)
 
-    if cl_4.color == ColorSensor.COLOR_BLACK:
-        display.text_pixels("Black Detected (Left)", x=10, y=50, clear_screen=True)
+    # if cl_4.color == ColorSensor.COLOR_BLACK:
+    #     display.text_pixels("Black Detected (Left)", x=10, y=50, clear_screen=False)
 
-    elif cl_4.color == ColorSensor.COLOR_RED:
-        display.text_pixels("Red Detected (Left)", x=10, y=70, clear_screen=False)
+    # elif cl_4.color == ColorSensor.COLOR_RED:
+    #     display.text_pixels("Red Detected (Left)", x=10, y=70, clear_screen=False)
 
-    elif cl_4.color == ColorSensor.COLOR_GREEN:
-        display.text_pixels("Green Detected (Left)", x=10, y=70, clear_screen=False)
+    # elif cl_4.color == ColorSensor.COLOR_GREEN:
+    #     display.text_pixels("Green Detected (Left)", x=10, y=70, clear_screen=False)
 
-    else:
-        display.text_pixels("Nothing Detected (Left)", x=10, y=70, clear_screen=False)
+    # else:
+    #     display.text_pixels("Nothing Detected (Left)", x=10, y=70, clear_screen=False)'''
+
+    display.text_pixels(f"{cl_1.color} (Right)", x=10, y=30, clear_screen=False)
+    display.text_pixels(f"{cl_4.color} (Left)", x=10, y=70, clear_screen=False)
+
     display.update()
 
 
