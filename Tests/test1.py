@@ -51,7 +51,8 @@ while True:
     # else:
     #     display.text_pixels("Nothing Detected (Left)", x=10, y=70, clear_screen=False)
 
-    # display.text_pixels("Right: {cl_1.color} Left: {cl_4.color}", x=10, y=30, clear_screen=False)
+    # display.text_pixels("Right: {cl_1.color} Left: {cl_4.color}"
+    # , x=10, y=30, clear_screen=False)
     display.text_pixels("Right:" + str(cl_1.color_name) + " Left:" + str(cl_4.color_name), x=10, y=30, clear_screen=False)
 
     display.update()
