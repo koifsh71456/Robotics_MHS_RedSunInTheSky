@@ -2,7 +2,7 @@
 # this is an example to test if the bot can detect the black colour
 
 from ev3dev2.sensor import Sensor, INPUT_1, INPUT_2, INPUT_3, INPUT_4
-from ev3dev2.sensor.lego import ColorSensor
+from ev3dev2.sensor.lego import ColorSensor, UltrasonicSensor
 from ev3dev2.motor import MoveTank, OUTPUT_B, OUTPUT_C
 from ev3dev2.display import Display
 from time import sleep
@@ -10,7 +10,7 @@ from time import sleep
 # Initialise the display, colour sensors and motors
 display = Display()
 cl_1 = ColorSensor(INPUT_1)
-# cl_2 = ColorSensor(INPUT_2)
+# ultrasonic = UltrasonicSensor(INPUT_2)
 # cl_3 = ColorSensor(INPUT_3)
 cl_4 = ColorSensor(INPUT_4)
 motors = MoveTank(OUTPUT_B, OUTPUT_C)
@@ -27,11 +27,17 @@ display.update()
 #     display.text_pixels("Right:" + str(cl_1.color_name) + " Left:" + str(cl_4.color_name), x=10, y=30, clear_screen=False)
 #     display.update()
 
+#ultrasonic detector distance test
+# while True:
+#     display.clear()
+#     display.text_pixels(ultrasonic.distance_centimeters, x=10, y=30, clear_screen=False)
+#     display.update()
+
 
 def followLine():
     detectable_colours = [ColorSensor.COLOR_BLACK, ColorSensor.COLOR_GREEN, ColorSensor.COLOR_RED]
-    # the direction variable gets returned by this function which will determine which
-    # way the robot goes based on the colour sensors.
+#     # the direction variable gets returned by this function which will determine which
+#     # way the robot goes based on the colour sensors.
     direction = ""
     if cl_1.color == ColorSensor.COLOR_BLACK:
         direction = "right"
