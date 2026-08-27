@@ -81,5 +81,5 @@ while True:
     distance = ultrasonic.distance_centimeters
     display.text_pixels("Object is {}cm away".format(distance), x=10, y=30, clear_screen=False)
     display.update()
-    if distance < 5:
-        avoidObstable()
+    # if distance < 5:
+    #     avoidObstable()
