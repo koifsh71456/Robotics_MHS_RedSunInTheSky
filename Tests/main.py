@@ -52,6 +52,14 @@ def followLine():
         
     return direction
 
+def avoidObstable():
+    motors.on_for_degrees(left_speed=20, right_speed=0, degrees=90)
+    motors.on(left_speed=20, right_speed=20, seconds=2)
+    motors.on_for_degrees(left_speed=0, right_speed=20, degrees=90)
+    motors.on(left_speed=20, right_speed=20, seconds=2)
+    motors.on_for_degrees(left_speed=0, right_speed=20, degrees=90)
+    motors.on(left_speed=20, right_speed=20, seconds=2)
+
 while True:
     direction = followLine()
     if distance > 5:
@@ -73,3 +81,5 @@ while True:
     distance = ultrasonic.distance_centimeters
     display.text_pixels("Object is {}cm away".format(distance), x=10, y=30, clear_screen=False)
     display.update()
+    if distance < 5:
+        avoidObstable()
