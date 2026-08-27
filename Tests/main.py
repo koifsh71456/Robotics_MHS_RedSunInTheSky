@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-# this is an example to test if the bot can detect the black colour
 
 from ev3dev2.sensor import Sensor, INPUT_1, INPUT_2, INPUT_3, INPUT_4
 from ev3dev2.sensor.lego import ColorSensor, UltrasonicSensor
+from ev3sim.code_helpers import wait_for_tick
 from ev3dev2.motor import MoveTank, OUTPUT_B, OUTPUT_C
 from ev3dev2.display import Display
 from time import sleep
@@ -10,7 +10,8 @@ from time import sleep
 # Initialise the display, colour sensors and motors
 display = Display()
 cl_1 = ColorSensor(INPUT_1)
-# ultrasonic = UltrasonicSensor(INPUT_2)
+ultrasonic = UltrasonicSensor(INPUT_2)
+distance = ultrasonic.distance_centimeters
 # cl_3 = ColorSensor(INPUT_3)
 cl_4 = ColorSensor(INPUT_4)
 motors = MoveTank(OUTPUT_B, OUTPUT_C)
@@ -28,10 +29,6 @@ display.update()
 #     display.update()
 
 #ultrasonic detector distance test
-# while True:
-#     display.clear()
-#     display.text_pixels(ultrasonic.distance_centimeters, x=10, y=30, clear_screen=False)
-#     display.update()
 
 
 def followLine():
@@ -50,20 +47,39 @@ def followLine():
         direction = "intersectionRight"
     if cl_4.color == ColorSensor.COLOR_GREEN:
         direction = "intersectionLeft"
+    if cl_1.color == ColorSensor.COLOR_GREEN and cl_4.color == ColorSensor.COLOR_GREEN:
+        direction = "bothGreen"
         
     return direction
 
+def avoidObstable():
+    motors.on_for_degrees(left_speed=20, right_speed=0, degrees=90)
+    motors.on(left_speed=20, right_speed=20, seconds=2)
+    motors.on_for_degrees(left_speed=0, right_speed=20, degrees=90)
+    motors.on(left_speed=20, right_speed=20, seconds=2)
+    motors.on_for_degrees(left_speed=0, right_speed=20, degrees=90)
+    motors.on(left_speed=20, right_speed=20, seconds=2)
+
 while True:
     direction = followLine()
-    if direction == "right":
-        motors.on(left_speed=0, right_speed=20)
-    elif direction == "left":
-        motors.on(left_speed=20, right_speed=0)
-    elif direction == "forward":
-        motors.on(left_speed=20, right_speed=20)
-    elif direction == "intersectionRight":
-        motors.on(left_speed=0, right_speed=20)
-    elif direction == "intersectionLeft":
-        motors.on(left_speed=20, right_speed=0)
+    if distance > 5:
+        if direction == "right":
+            motors.on(left_speed=0, right_speed=20)
+        elif direction == "left":
+            motors.on(left_speed=20, right_speed=0)
+        elif direction == "forward":
+            motors.on(left_speed=20, right_speed=20)
+        elif direction == "intersectionRight":
+            motors.on(left_speed=0, right_speed=20)
+        elif direction == "intersectionLeft":
+            motors.on(left_speed=20, right_speed=0)
+        else:
+            motors.off()
     else:
         motors.off()
+    display.clear()
+    distance = ultrasonic.distance_centimeters
+    display.text_pixels("Object is {}cm away".format(distance), x=10, y=30, clear_screen=False)
+    display.update()
+    if distance < 5:
+        avoidObstable()
