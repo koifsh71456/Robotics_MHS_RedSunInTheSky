@@ -70,9 +70,11 @@ while True:
         elif direction == "forward":
             motors.on(left_speed=20, right_speed=20)
         elif direction == "intersectionRight":
-            motors.on(left_speed=0, right_speed=20)
+            motors.on_for_degrees(left_speed=20, right_speed=0, degrees=90)
+            motors.on(left_speed=20, right_speed=20, seconds=0.5)
         elif direction == "intersectionLeft":
-            motors.on(left_speed=20, right_speed=0)
+            motors.on_for_degrees(left_speed=20, right_speed=0, degrees=90)
+            motors.on(left_speed=20, right_speed=20, seconds=0.5)
         else:
             motors.off()
     else:
