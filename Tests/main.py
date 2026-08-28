@@ -9,14 +9,14 @@ from time import sleep
 
 # Initialise the display, colour sensors and motors
 display = Display()
-cl_1 = ColorSensor(INPUT_1)
-ultrasonic = UltrasonicSensor(INPUT_2)
+cl_1 = ColorSensor(INPUT_4)
+ultrasonic = UltrasonicSensor(INPUT_3)
 distance = ultrasonic.distance_centimeters
 # cl_3 = ColorSensor(INPUT_3)
-cl_4 = ColorSensor(INPUT_4)
+cl_4 = ColorSensor(INPUT_1)
 motors = MoveTank(OUTPUT_B, OUTPUT_C)
 
-# INPUT_1 is the right colour sensor, INPUT_4 is left
+# INPUT_4 is the right colour sensor, INPUT_1 is left
 cl_1.mode = ColorSensor.MODE_COL_COLOR
 cl_4.mode = ColorSensor.MODE_COL_COLOR
 
@@ -64,24 +64,26 @@ while True:
     direction = followLine()
     if distance > 5:
         if direction == "right":
-            motors.on(left_speed=0, right_speed=20)
+            motors.on(left_speed=-20, right_speed=0)
         elif direction == "left":
-            motors.on(left_speed=20, right_speed=0)
+            motors.on(left_speed=0, right_speed=-20)
         elif direction == "forward":
-            motors.on(left_speed=20, right_speed=20)
+            motors.on(left_speed=-20, right_speed=-20)
         elif direction == "intersectionRight":
-            motors.on_for_degrees(left_speed=20, right_speed=0, degrees=90)
-            motors.on(left_speed=20, right_speed=20, seconds=0.5)
+            motors.on_for_degrees(left_speed=-20, right_speed=0, degrees=90)
+            # motors.on_for_seconds(left_speed=20, right_speed=20, seconds=1)
         elif direction == "intersectionLeft":
-            motors.on_for_degrees(left_speed=20, right_speed=0, degrees=90)
-            motors.on(left_speed=20, right_speed=20, seconds=0.5)
+            motors.on_for_degrees(left_speed=0, right_speed=-20, degrees=90)
+            # motors.on_for_seconds(left_speed=20, right_speed=20, seconds=1)
         else:
-            motors.off()
+            # motors.off()
+            motors.on(left_speed=-20, right_speed=-20)
     else:
         motors.off()
     display.clear()
     distance = ultrasonic.distance_centimeters
     display.text_pixels("Object is {}cm away".format(distance), x=10, y=30, clear_screen=False)
+    display.text_pixels("{}".format(distance), x=10, y=30, clear_screen=False)
     display.update()
     # if distance < 5:
     #     avoidObstable()
