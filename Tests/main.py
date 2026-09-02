@@ -55,7 +55,7 @@ def followLine():
 
 def avoidObstable():
     # The idea is for the robot to move to the right, move around the obstacle, then move back to the line
-    motors.on_for_degrees(left_speed=20, right_speed=0, degrees=90)
+    motors.on_for_degrees(left_speed=20, right_speed=0, degrees=90) # The degrees will have to be adjusted to make sure the robot turns enough to avoid the obstacle
     motors.on(left_speed=20, right_speed=20, seconds=2)
     motors.on_for_degrees(left_speed=0, right_speed=20, degrees=90)
     motors.on(left_speed=20, right_speed=20, seconds=2)
@@ -76,7 +76,7 @@ while True:
             motors.on(left_speed=-20, right_speed=-20)
         elif direction == "intersectionRight":
             # When the right colour sensor detects green, the robot will turn right to follow the line
-            motors.on_for_degrees(left_speed=20, right_speed=0, degrees=90)
+            motors.on_for_degrees(left_speed=20, right_speed=0, degrees=90) # Need to adjust the degrees to make sure the robot turns enough to follow the line
             motors.on(left_speed=20, right_speed=20, seconds=0.5)
         elif direction == "intersectionLeft":
             # Same as above but for the left colour sensor
