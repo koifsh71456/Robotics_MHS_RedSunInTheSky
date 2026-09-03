@@ -74,10 +74,10 @@ while True:
     if distance > 5:
         if direction == "right":
             # When the right colour sensor detects black, the robot will turn right to follow the line
-            motors.on(left_speed=-20, right_speed=0)
+            motors.on(left_speed=-15, right_speed=0)
         elif direction == "left":
             # Same as above but for the left colour sensor
-            motors.on(left_speed=0, right_speed=-20)
+            motors.on(left_speed=0, right_speed=-15)
         elif direction == "forward":
             # Move forward when both colour sensors are not detecting black
             motors.on(left_speed=-15, right_speed=-15)
@@ -116,8 +116,8 @@ while True:
             # will move onto the rescue phase
             break
 
-    # if distance < 5:
-    #     avoidObstable() # Will have to be worked on to make sure the robot can get back to the line after avoiding the obstacle
+    if distance < 5:
+        avoidObstable() # Will have to be worked on to make sure the robot can get back to the line after avoiding the obstacle
 
 
 #below is the rescue phase.
