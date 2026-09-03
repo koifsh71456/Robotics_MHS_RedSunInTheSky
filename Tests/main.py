@@ -20,6 +20,7 @@ motors = MoveTank(OUTPUT_B, OUTPUT_C)
 cl_1.mode = ColorSensor.MODE_COL_COLOR
 cl_4.mode = ColorSensor.MODE_COL_COLOR
 
+# Screen initialisation for robot
 display.text_pixels("Hello!", x=10, y=10, clear_screen=True)
 display.update()
 
@@ -60,7 +61,8 @@ def followLine():
     return direction
 
 def avoidObstable():
-    motors.on_for_degrees(left_speed=20, right_speed=0, degrees=90)
+    # The idea is for the robot to move to the right, move around the obstacle, then move back to the line
+    motors.on_for_degrees(left_speed=20, right_speed=0, degrees=90) # The degrees will have to be adjusted to make sure the robot turns enough to avoid the obstacle
     motors.on(left_speed=20, right_speed=20, seconds=2)
     motors.on_for_degrees(left_speed=0, right_speed=20, degrees=90)
     motors.on(left_speed=20, right_speed=20, seconds=2)
@@ -68,31 +70,34 @@ def avoidObstable():
     motors.on(left_speed=20, right_speed=20, seconds=2)
 
 while True:
-    direction = followLine()
+    direction = followLine() # set followLine() to a variable so it can be used in the if statements below
     if distance > 5:
         if direction == "right":
+            # When the right colour sensor detects black, the robot will turn right to follow the line
             motors.on(left_speed=-20, right_speed=0)
         elif direction == "left":
+            # Same as above but for the left colour sensor
             motors.on(left_speed=0, right_speed=-20)
         elif direction == "forward":
+            # Move forward when both colour sensors are not detecting black
             motors.on(left_speed=-20, right_speed=-20)
         elif direction == "intersectionRight":
-            motors.on_for_degrees(left_speed=-20, right_speed=0, degrees=270)
-            motors.on_for_seconds(left_speed=-10, right_speed=-10, seconds=1)
-            green_intersection_direction = "null"
+            motors.on_for_degrees(left_speed=-20, right_speed=0, degrees=90)
+            # motors.on_for_seconds(left_speed=20, right_speed=20, seconds=1)
         elif direction == "intersectionLeft":
-            motors.on_for_degrees(left_speed=0, right_speed=-20, degrees=270)
-            motors.on_for_seconds(left_speed=-10, right_speed=-10, seconds=1)
-            green_intersection_direction = "null"
+            motors.on_for_degrees(left_speed=0, right_speed=-20, degrees=90)
+            # motors.on_for_seconds(left_speed=20, right_speed=20, seconds=1)
         else:
             # motors.off()
+            # Otherwise, move forward when both colour sensors are detecting green
             motors.on(left_speed=-20, right_speed=-20)
     else:
+        # If the ultrasonic sensor detects an object within 5cm, the robot will stop and display the distance on the screen
         motors.off()
     display.clear()
     distance = ultrasonic.distance_centimeters
-    display.text_pixels("Object is {}cm away".format(distance), x=10, y=30, clear_screen=False)
-    display.text_pixels("{}".format(distance), x=10, y=30, clear_screen=False)
+    display.text_pixels("Object is {}cm away".format(distance), x=10, y=30, clear_screen=False) # Ultrasonic debug
+    display.text_pixels("{}".format(distance), x=10, y=30, clear_screen=False) # Ultrasonic debug
     display.update()
     # if distance < 5:
-    #     avoidObstable()
+    #     avoidObstable() # Will have to be worked on to make sure the robot can get back to the line after avoiding the obstacle
