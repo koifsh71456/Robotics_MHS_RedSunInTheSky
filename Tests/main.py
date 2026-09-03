@@ -30,6 +30,7 @@ display.update()
 
 #ultrasonic detector distance test
 
+green_intersection_direction = "null"
 
 def followLine():
     detectable_colours = [ColorSensor.COLOR_BLACK, ColorSensor.COLOR_GREEN, ColorSensor.COLOR_RED]
@@ -40,13 +41,19 @@ def followLine():
         direction = "right"
     if cl_4.color == ColorSensor.COLOR_BLACK:
         direction = "left"
-    if cl_1.color not in detectable_colours and cl_4.color not in detectable_colours:
+    if cl_1.color == ColorSensor.COLOR_BLACK and cl_4.color == ColorSensor.COLOR_BLACK:
+        direction = green_intersection_direction
+        if direction == "null":
+            direction = "forward"
+    # if cl_1.color not in detectable_colours and cl_4.color not in detectable_colours:
+    #     direction = "forward"
+    if cl_1.color != ColorSensor.COLOR_BLACK and cl_4.color != ColorSensor.COLOR_BLACK:
         direction = "forward"
     # intersections will have a green square to guide to the correct direction
     if cl_1.color == ColorSensor.COLOR_GREEN:
-        direction = "intersectionRight"
+        green_intersection_direction = "intersectionRight"
     if cl_4.color == ColorSensor.COLOR_GREEN:
-        direction = "intersectionLeft"
+        green_intersection_direction = "intersectionLeft"
     if cl_1.color == ColorSensor.COLOR_GREEN and cl_4.color == ColorSensor.COLOR_GREEN:
         direction = "bothGreen"
         
@@ -70,11 +77,13 @@ while True:
         elif direction == "forward":
             motors.on(left_speed=-20, right_speed=-20)
         elif direction == "intersectionRight":
-            motors.on_for_degrees(left_speed=-20, right_speed=0, degrees=90)
-            # motors.on_for_seconds(left_speed=20, right_speed=20, seconds=1)
+            motors.on_for_degrees(left_speed=-20, right_speed=0, degrees=270)
+            motors.on_for_seconds(left_speed=-10, right_speed=-10, seconds=1)
+            green_intersection_direction = "null"
         elif direction == "intersectionLeft":
-            motors.on_for_degrees(left_speed=0, right_speed=-20, degrees=90)
-            # motors.on_for_seconds(left_speed=20, right_speed=20, seconds=1)
+            motors.on_for_degrees(left_speed=0, right_speed=-20, degrees=270)
+            motors.on_for_seconds(left_speed=-10, right_speed=-10, seconds=1)
+            green_intersection_direction = "null"
         else:
             # motors.off()
             motors.on(left_speed=-20, right_speed=-20)
