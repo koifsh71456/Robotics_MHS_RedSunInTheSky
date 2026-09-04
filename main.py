@@ -87,6 +87,8 @@ while True:
             '''motors.on_for_degrees(left_speed=-10, right_speed=-10, degrees=360)
             motors.on_for_degrees(left_speed=-10, right_speed=10, degrees=150)
             motors.on_for_degrees(left_speed=10, right_speed=10, degrees=200)'''
+
+            motors.on_for_rotations(left_speed=-10, right_speed=-10, rotations=0.5)
             
             direction = "null"
         elif direction == "intersectionLeft":
