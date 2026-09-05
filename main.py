@@ -7,6 +7,9 @@ from ev3dev2.motor import MoveTank, OUTPUT_B, OUTPUT_C
 from ev3dev2.display import Display
 from time import sleep
 
+
+
+
 # Initialise the display, colour sensors and motors
 display = Display()
 cl_1 = ColorSensor(INPUT_4)
@@ -46,6 +49,7 @@ def followLine():
     if cl_1.color == ColorSensor.COLOR_BLACK and cl_4.color == ColorSensor.COLOR_BLACK:
         # direction = green_intersection_direction
         direction = "forward"
+
     # if cl_1.color not in detectable_colours and cl_4.color not in detectable_colours:
     #     direction = "forward"
     if cl_1.color != ColorSensor.COLOR_BLACK and cl_4.color != ColorSensor.COLOR_BLACK:
@@ -57,7 +61,6 @@ def followLine():
         direction = "intersectionLeft"
     if cl_1.color == ColorSensor.COLOR_GREEN and cl_4.color == ColorSensor.COLOR_GREEN:
         direction = "bothGreen"
-        
     return direction
 
 def avoidObstable():
@@ -75,43 +78,50 @@ while True:
         if direction == "right":
             # When the right colour sensor detects black, the robot will turn right to follow the line
             motors.on(left_speed=-15, right_speed=0)
+            sleep(0.1)
         elif direction == "left":
             # Same as above but for the left colour sensor
             motors.on(left_speed=0, right_speed=-15)
+            sleep(0.1)
         elif direction == "forward":
             # Move forward when both colour sensors are not detecting black
-            motors.on(left_speed=-15, right_speed=-15)
+            motors.on(left_speed=-10, right_speed=-10)
         elif direction == "intersectionRight":
-            # motors.on_for_degrees(left_speed=-10, right_speed=10, degrees=180)
-            # motors.on_for_seconds(left_speed=10, right_speed=-10, seconds=1)
-            '''motors.on_for_degrees(left_speed=-10, right_speed=-10, degrees=360)
-            motors.on_for_degrees(left_speed=-10, right_speed=10, degrees=150)
-            motors.on_for_degrees(left_speed=10, right_speed=10, degrees=200)'''
-
-            motors.on_for_rotations(left_speed=-10, right_speed=-10, rotations=0.5)
-            
-            direction = "null"
+            #when green is detected on the right, the robot will move forward a little to
+            #align itself with the intersection, turn right until the left sensor detects black,
+            # then it will move left a little to make sure it is aligned with the line again
+            motors.on_for_degrees(left_speed=-10, right_speed=-10, degrees=360)
+            while True:
+                motors.on(left_speed=-10, right_speed=0)
+                if cl_4.color == ColorSensor.COLOR_BLACK:
+                    motors.on_for_degrees(left_speed=0, right_speed=-10, degrees=20)
+                    break
         elif direction == "intersectionLeft":
-            motors.on_for_degrees(left_speed=10, right_speed=-10, degrees=180)
-            # motors.on_for_seconds(left_speed=-10, right_speed=10, seconds=1)
-            direction = "null"
+            #same as above but for left intersections
+            motors.on_for_degrees(left_speed=-10, right_speed=-10, degrees=360)
+            while True:
+                motors.on(left_speed=0, right_speed=-10)
+                if cl_4.color == ColorSensor.COLOR_BLACK:
+                    motors.on_for_degrees(left_speed=-10, right_speed=0, degrees=20)
+                    break
         else:
             # motors.off()
-            # Otherwise, move forward when both colour sensors are detecting green
-            motors.on(left_speed=-20, right_speed=-20)
+            # Theorietically, this should not happen, but this is added just in
+            # case direction doesn't equal any of the above due to an error.
+            motors.on(left_speed=-5, right_speed=-5)
     else:
         # If the ultrasonic sensor detects an object within 5cm, the robot will stop and display the distance on the screen
         motors.off()
-    display.clear()
     distance = ultrasonic.distance_centimeters
-    display.text_pixels("Object is {}cm away".format(distance), x=10, y=30, clear_screen=False) # Ultrasonic debug
-    display.text_pixels("{}".format(distance), x=10, y=30, clear_screen=False) # Ultrasonic debug
-    display.text_pixels("{}".format(green_intersection_direction), x=10, y=50, clear_screen=False) # Ultrasonic debug
+    # display.text_pixels("direction: {}".format(direction), x=10, y=30, clear_screen=True)
+    # display.text_pixels("Object is {}cm away".format(distance), x=10, y=30, clear_screen=False) # Ultrasonic debug
+    # display.text_pixels("{}".format(distance), x=10, y=30, clear_screen=False) # Ultrasonic debug
+    # display.text_pixels("{}".format(green_intersection_direction), x=10, y=50, clear_screen=False) # Ultrasonic debug
 
-    display.update()
+    # display.update()
     reflected_light_intensity = cl_1.reflected_light_intensity + cl_4.reflected_light_intensity
     if reflected_light_intensity > 150:
-        motors.on_for_seconds(left_speed=-20, right_speed=-20, seconds=1)
+        motors.on_for_seconds(left_speed=-10, right_speed=-10, seconds=1)
         if cl_1.color == ColorSensor.COLOR_GREEN and cl_4.color == ColorSensor.COLOR_GREEN:
             # When both colour sensors detect green, that means that the robot has detected that it's in the rescue zone and will move onto the rescue phase
             # When reflected light intensity is > 150, that means that the robot has detected that it's in the rescue zone and
@@ -130,6 +140,12 @@ while True:
     motors.on(left_speed=-8, right_speed=8)
     if distance < 30:
         break
-while distance > 10:
+while True:
     distance = ultrasonic.distance_centimeters
-    motors.on(left_speed=-15, right_speed=-15)
+    motors.on(left_speed=-10, right_speed=-10)
+    if cl_1.color == ColorSensor.COLOR_WHITE or cl_4.color == ColorSensor.COLOR_WHITE:
+        # When any colour sensor detects white, it means the robot is on the edge
+        # of the rescue zone and will have pushed the victim out of the rescue zone
+        break
+
+
